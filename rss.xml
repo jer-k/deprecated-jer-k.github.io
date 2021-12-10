@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Jeremy Kreutzbender's Blog]]></title><description><![CDATA[Welcome to my programming blog!]]></description><link>https://jer-k.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 30 Apr 2021 17:40:26 GMT</lastBuildDate><item><title><![CDATA[First Year At An Early Stage Startup (Release)]]></title><description><![CDATA[<p><img src="media/release-logo.png" alt="release-logo"></p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Jeremy Kreutzbender's Blog]]></title><description><![CDATA[Welcome to my programming blog!]]></description><link>https://jer-k.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 10 Dec 2021 05:13:39 GMT</lastBuildDate><item><title><![CDATA[First Year At An Early Stage Startup (Release)]]></title><description><![CDATA[<p><img src="media/release-logo.png" alt="release-logo"></p>
 <p>Happy Launch Day! If you weren’t aware, <a href="https://releasehub.com/" target="_blank" rel="nofollow noopener noreferrer">Release</a> came out of beta today. Here are some links to news articles related to our launch.</p>
 <ul>
 <li><a href="https://techcrunch.com/2021/04/29/releasehub-nabs-2-7m-seed-to-give-developers-on-demand-environments/" target="_blank" rel="nofollow noopener noreferrer">ReleaseHub nabs $2.7M seed to give developers on-demand environments</a> - TechCrunch Article</li>
@@ -115,14 +115,14 @@ RUN wget https://github.com/docker/docker-credential-helpers/releases/download/v
     &amp;amp;&amp;amp; rm docker-credential-pass-v0.6.3-amd64.tar.gz&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;Next we’ll install &lt;code class=&quot;language-text&quot;&gt;docker-credential-helpers&lt;/code&gt; and one of the first comments on the aforementioned issue &lt;a href=&quot;https://github.com/docker/docker-credential-helpers/issues/102#issuecomment-388974092&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;showed&lt;/a&gt; how to do this. I just modified the release number to get the most up to date version.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;# Create the .docker directory, copy in the config.json file which sets the credential store as pass, and set the correct permissions
 RUN mkdir -p $HOME/.docker/
 COPY config.json $HOME/.docker/
 RUN chown -R $USER:appgroup $HOME/.docker
 RUN chmod -R 755 $HOME/.docker&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;# config.json file
 
 {
@@ -130,14 +130,14 @@ RUN chmod -R 755 $HOME/.docker&lt;/code&gt;
 }&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;Now we need to create our &lt;code class=&quot;language-text&quot;&gt;.docker&lt;/code&gt; directory and ensure that our user has full control over it. We copy in the &lt;code class=&quot;language-text&quot;&gt;config.json&lt;/code&gt; file which tells Docker to use &lt;code class=&quot;language-text&quot;&gt;pass&lt;/code&gt; as a credential store.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;# Create the .gnupg directory and set the correct permissions
 RUN mkdir -p $HOME/.gnupg/
 RUN chown -R $USER:appgroup $HOME/.gnupg
 RUN chmod -R 700 $HOME/.gnupg&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;After a little bit of trial and error, I discovered that I needed a &lt;code class=&quot;language-text&quot;&gt;.gnupg&lt;/code&gt; directory with correct permissions before &lt;code class=&quot;language-text&quot;&gt;gpg&lt;/code&gt; would allow me to generate the key. With that, everything is now set up to start generating our secure login.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;WORKDIR $HOME
 USER $USER
 
@@ -146,7 +146,7 @@ COPY gpg_file.txt .
 # Edit the gpg file to add our password and generate the key
 RUN --mount=type=secret,id=gpg_password,uid=1001 cat gpg_file.txt | sed &amp;#39;s/gpg_password/&amp;#39;&amp;quot;`cat /run/secrets/gpg_password`&amp;quot;&amp;#39;/g&amp;#39; | gpg --batch --generate-key&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;# gpg_file.txt
 
 # Example from https://www.gnupg.org/documentation//manuals/gnupg/Unattended-GPG-key-generation.html
@@ -166,9 +166,9 @@ Passphrase: gpg_password
 &lt;p&gt;There is a bit to unpack here, but first we set our &lt;code class=&quot;language-text&quot;&gt;WORKDIR&lt;/code&gt; to the &lt;code class=&quot;language-text&quot;&gt;$HOME&lt;/code&gt; directory and change from the root user to our &lt;code class=&quot;language-text&quot;&gt;$USER&lt;/code&gt;. Next we copy in the &lt;code class=&quot;language-text&quot;&gt;gpg_file.txt&lt;/code&gt; file shown above, which is a modified example from &lt;a href=&quot;https://www.gnupg.org/documentation//manuals/gnupg/Unattended-GPG-key-generation.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;gnupg.org&lt;/a&gt;. The &lt;code class=&quot;language-text&quot;&gt;RUN&lt;/code&gt; line can be broken down into a few different pieces so we’ll go through it piece by piece.&lt;/p&gt;
 &lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;--mount=type=secret,id=gpg_password,uid=1001&lt;/code&gt; is taking advantage of using &lt;a href=&quot;https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md#run---mounttypesecret&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;BuildKit secrets&lt;/a&gt;. If you want to read about BuildKit secrets, I would suggest the official Docker documentation &lt;a href=&quot;https://docs.docker.com/develop/develop-images/build_enhancements/#new-docker-build-secret-information&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;New Docker Build secret information&lt;/a&gt;, however the gist of this functionality is that the secret is only supplied to this single &lt;code class=&quot;language-text&quot;&gt;RUN&lt;/code&gt; command and is not left behind as an artifact in the layer. The command is saying to make available the mounted secret at &lt;code class=&quot;language-text&quot;&gt;id=gpg_password&lt;/code&gt; and access it as user 1001 (which we set when we generated the user).&lt;/p&gt;
 &lt;p&gt;As a side note, I would have created a &lt;code class=&quot;language-text&quot;&gt;$USER_UID&lt;/code&gt; environment variable instead of hard coding the uid, but this mount command cannot interpret a Docker environment variable (see BuildKit issue &lt;a href=&quot;https://github.com/moby/buildkit/issues/815&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;815&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;cat gpg_file.txt | sed &amp;#39;s/gpg_password/&amp;#39;&amp;quot;&amp;amp;96cat /run/secrets/gpg_password&amp;amp;96&amp;quot;&amp;#39;/g&amp;#39; |&lt;/code&gt; is piping the contents of our &lt;code class=&quot;language-text&quot;&gt;gpg_file.txt&lt;/code&gt; file into &lt;code class=&quot;language-text&quot;&gt;sed&lt;/code&gt; where we’re doing a find on &lt;code class=&quot;language-text&quot;&gt;gpg_password&lt;/code&gt; and replacing it by accessing our mounted secret at and outputting the value through &lt;code class=&quot;language-text&quot;&gt;cat&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;cat gpg_file.txt | sed &apos;s/gpg_password/&apos;&quot;&amp;amp;96cat /run/secrets/gpg_password&amp;amp;96&quot;&apos;/g&apos; |&lt;/code&gt; is piping the contents of our &lt;code class=&quot;language-text&quot;&gt;gpg_file.txt&lt;/code&gt; file into &lt;code class=&quot;language-text&quot;&gt;sed&lt;/code&gt; where we’re doing a find on &lt;code class=&quot;language-text&quot;&gt;gpg_password&lt;/code&gt; and replacing it by accessing our mounted secret at and outputting the value through &lt;code class=&quot;language-text&quot;&gt;cat&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;gpg --batch --generate-key&lt;/code&gt; is receiving the contents of the file, with our password in place and generating the key in unattended mode via the &lt;code class=&quot;language-text&quot;&gt;--batch&lt;/code&gt; flag. With that we’ve successfully generated a key we can use to seed &lt;code class=&quot;language-text&quot;&gt;pass&lt;/code&gt;.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;# Generate the pass store by accessing and passing the gpg fingerprint
 RUN pass init $(gpg --list-secret-keys dockertester@docker.com | sed -n &amp;#39;/sec/{n;p}&amp;#39; | sed &amp;#39;s/^[[:space:]]*//g&amp;#39;)&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
@@ -182,20 +182,20 @@ sec   dsa1024 2020-07-12 [SCA]
 uid           [ultimate] Docker Tester &amp;lt;dockertester@docker.com&amp;gt;
 ssb   elg1024 2020-07-12 [E]&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
-&lt;p&gt;That output is piped into &lt;code class=&quot;language-text&quot;&gt;sed -n &amp;#39;/sec/{n;p}&amp;#39;&lt;/code&gt; which finds the match of &lt;code class=&quot;language-text&quot;&gt;sec&lt;/code&gt;, then goes to the &lt;code class=&quot;language-text&quot;&gt;n&lt;/code&gt;ext line and &lt;code class=&quot;language-text&quot;&gt;p&lt;/code&gt;rints it. A larger explanation can be found in &lt;a href=&quot;https://unix.stackexchange.com/a/31535&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;this Stack Overflow answer&lt;/a&gt;. This command returns &lt;code class=&quot;language-text&quot;&gt;D48ED9A99CFDDBD8B3D08A6EA4BEBAE5B209C126&lt;/code&gt;, which is our gpg key, but it includes the whitespace.&lt;/p&gt;
-&lt;p&gt;The last command, &lt;code class=&quot;language-text&quot;&gt;sed &amp;#39;s/^[[:space:]]*//g&amp;#39;&lt;/code&gt;, takes in the key with the whitespace and removes all the whitespace so we’re left with just the key, which is used by &lt;code class=&quot;language-text&quot;&gt;pass init&lt;/code&gt;. Now we’re ready to securely log into Docker!&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;p&gt;That output is piped into &lt;code class=&quot;language-text&quot;&gt;sed -n &apos;/sec/{n;p}&apos;&lt;/code&gt; which finds the match of &lt;code class=&quot;language-text&quot;&gt;sec&lt;/code&gt;, then goes to the &lt;code class=&quot;language-text&quot;&gt;n&lt;/code&gt;ext line and &lt;code class=&quot;language-text&quot;&gt;p&lt;/code&gt;rints it. A larger explanation can be found in &lt;a href=&quot;https://unix.stackexchange.com/a/31535&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;this Stack Overflow answer&lt;/a&gt;. This command returns &lt;code class=&quot;language-text&quot;&gt;D48ED9A99CFDDBD8B3D08A6EA4BEBAE5B209C126&lt;/code&gt;, which is our gpg key, but it includes the whitespace.&lt;/p&gt;
+&lt;p&gt;The last command, &lt;code class=&quot;language-text&quot;&gt;sed &apos;s/^[[:space:]]*//g&apos;&lt;/code&gt;, takes in the key with the whitespace and removes all the whitespace so we’re left with just the key, which is used by &lt;code class=&quot;language-text&quot;&gt;pass init&lt;/code&gt;. Now we’re ready to securely log into Docker!&lt;/p&gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;# Login to Docker
 ARG DOCKER_USER
 RUN --mount=type=secret,id=docker_password,uid=1001 cat /run/secrets/docker_password | docker login --username $DOCKER_USER --password-stdin&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;By calling &lt;code class=&quot;language-text&quot;&gt;ARG DOCKER_USER&lt;/code&gt; we’re making that build argument available to us via &lt;code class=&quot;language-text&quot;&gt;$DOCKER_USER&lt;/code&gt;. Then we’re using the same secret syntax as the previous &lt;code class=&quot;language-text&quot;&gt;RUN&lt;/code&gt; command, but this time accessing &lt;code class=&quot;language-text&quot;&gt;docker_password&lt;/code&gt; and piping the password into the &lt;code class=&quot;language-text&quot;&gt;docker login&lt;/code&gt; command that was suggested from the original warning output seen in the screenshot as the beginning of the article.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;# Using cat will keep the container running
 CMD [&amp;quot;cat&amp;quot;]&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;The final piece of the &lt;code class=&quot;language-text&quot;&gt;Dockerfile&lt;/code&gt; is the command, which is &lt;code class=&quot;language-text&quot;&gt;cat&lt;/code&gt; for the sole purpose of keeping the container running for this demo. Now that we’ve covered the contents of the &lt;code class=&quot;language-text&quot;&gt;Dockerfile&lt;/code&gt;, the next step is to build the image.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;$ DOCKER_BUILDKIT=1 docker build -t alpine_docker_pass --secret id=gpg_password,src=gpg_password.txt --secret id=docker_password,src=docker_password.txt --build-arg DOCKER_USER=your_docker_username .&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;Let’s do another breakdown.&lt;/p&gt;
@@ -235,18 +235,18 @@ volumes:
   certs:&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;Awhile ago I came across this article &lt;a href=&quot;https://www.caktusgroup.com/blog/2020/02/25/docker-image/&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;How to Use the “docker” Docker Image to Run Your Own Docker daemon&lt;/a&gt; that explained how to set up a compose file with &lt;code class=&quot;language-text&quot;&gt;dind&lt;/code&gt;; it is a very good read and I highly recommend it. I borrowed most of the setup from that article, the only interesting thing to note here is &lt;code class=&quot;language-text&quot;&gt;image: localhost:5000/alpine_docker_pass:latest&lt;/code&gt;. We need a way to reference our locally built image and we can do that via &lt;code class=&quot;language-text&quot;&gt;docker tag alpine_docker_pass:latest localhost:5000/alpine_docker_pass:latest&lt;/code&gt;. The port on localhost can be anything; there does not need to be a real running server on that port. By tagging our image this way, we ensure that docker will pull our local image and not try to pull an image from Dockerhub. However, I have also pushed the same image to a private repository on my Dockerhub account so that I can test the authentication from the container for the purpose of this example. Let’s run the compose file.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;$ docker-compose up -d
 $ docker exec -it alpine_docker_pass_alpine_docker_pass_1 /bin/bash&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;The following commands are run from inside the container and are denoted by the &lt;code class=&quot;language-text&quot;&gt;bash-5.0&lt;/code&gt; prefix.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;bash-5.0$ docker pull itsjerk/alpine_docker_pass
 Using default tag: latest
 Error response from daemon: pull access denied for itsjerk/alpine_docker_pass, repository does not exist or may require &amp;#39;docker login&amp;#39;: denied: requested access to the resource is denied&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;First a quick test to show that we aren’t authenticated and can’t pull the image.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;bash-5.0$ pass
 Password Store
 └── docker-credential-helpers
@@ -256,7 +256,7 @@ bash-5.0$ pass docker-credential-helpers/aHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEv/it
 &amp;lt;mypassword&amp;gt;bash-5.0$&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;Next we can list out our saved passwords by calling &lt;code class=&quot;language-text&quot;&gt;pass&lt;/code&gt; and initiate the log in by calling &lt;code class=&quot;language-text&quot;&gt;pass docker-credential-helpers/aHR0cHM6Ly9pbmRleC5kb2NrZXIuaW8vdjEv/itsjerk&lt;/code&gt;. We are then prompted to put in our password which was in the &lt;code class=&quot;language-text&quot;&gt;gpg_password.txt&lt;/code&gt; file. &lt;code class=&quot;language-text&quot;&gt;pass&lt;/code&gt; will spit out your password (without a newline at the end!) if everything works. I have redacted my own password.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;bash-5.0$ docker login
 Authenticating with existing credentials...
 Login Succeeded
@@ -280,7 +280,7 @@ docker.io/itsjerk/alpine_docker_pass:latest&lt;/code&gt;
   end
 end&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
-&lt;p&gt;This ensures that the coverage is above 90% and any changes in the future must not drop the coverage by more than 2%. The Gem, in its infancy, does not pass this requirement. Due to that failure, I had to figure out why the Action was not uploading the coverage results. Remember to put the &lt;code class=&quot;language-text&quot;&gt;SimpleCov&lt;/code&gt; code at the very top of &lt;code class=&quot;language-text&quot;&gt;spec_helper.rb&lt;/code&gt;, before you do &lt;code class=&quot;language-text&quot;&gt;require &amp;#39;your_gem&amp;#39;&lt;/code&gt; to ensure it knows what files to track.&lt;/p&gt;
+&lt;p&gt;This ensures that the coverage is above 90% and any changes in the future must not drop the coverage by more than 2%. The Gem, in its infancy, does not pass this requirement. Due to that failure, I had to figure out why the Action was not uploading the coverage results. Remember to put the &lt;code class=&quot;language-text&quot;&gt;SimpleCov&lt;/code&gt; code at the very top of &lt;code class=&quot;language-text&quot;&gt;spec_helper.rb&lt;/code&gt;, before you do &lt;code class=&quot;language-text&quot;&gt;require &apos;your_gem&apos;&lt;/code&gt; to ensure it knows what files to track.&lt;/p&gt;
 &lt;p&gt;Now let’s look at the Action, which is based off the default &lt;a href=&quot;https://github.com/actions/starter-workflows/blob/master/ci/ruby.yml&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Ruby Action&lt;/a&gt; supplied by Github.&lt;/p&gt;
 &lt;deckgo-highlight-code language=&quot;yaml&quot;  &gt;
           &lt;code slot=&quot;code&quot;&gt;name: RSpec with SimpleCov for a Gem
@@ -374,7 +374,7 @@ The HMAC hex digest is generated using the sha1 hash function and the secret as 
 end&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;If we look at the &lt;a href=&quot;https://developer.github.com/webhooks/#example-delivery&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Example delivery&lt;/a&gt; from Github, it shows&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;X-Hub-Signature: sha1=7d38cdd689735b008b3c702edd92eea23791c5f6&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;so what we want to do is pattern match on the header value to ensure it is formed correctly with &lt;code class=&quot;language-text&quot;&gt;sha1=&lt;/code&gt; precreeding the digest and then return the digest.&lt;/p&gt;
@@ -465,7 +465,7 @@ end&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;The ordering of the plugs becomes important, remember that we want the parsed body available when we do the authentication so we need to put the &lt;code class=&quot;language-text&quot;&gt;Parsers&lt;/code&gt; plug above the &lt;code class=&quot;language-text&quot;&gt;GithubAuthentication&lt;/code&gt; plug. We need to add the &lt;code class=&quot;language-text&quot;&gt;body_reader: {MyApp.Plugs.CacheBodyReader, :read_body, []},&lt;/code&gt; line to ensure that the raw body is also available when we’re trying to authenticate. Finally we’ll add an endpoint to test the events and we should be good to go.&lt;/p&gt;
 &lt;p&gt;Let’s try it out. I’m going to use &lt;a href=&quot;https://ngrok.com&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;ngrok&lt;/a&gt; to expose a url Github can reach and then send over an event to ensure everything works. Then I’m going to change the secret in the application to “not&lt;em&gt;the&lt;/em&gt;secret” and the response should be a 401.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;Session Status                online
 Session Expires               7 hours, 40 minutes
 Version                       2.3.34
@@ -579,7 +579,7 @@ The &lt;code class=&quot;language-text&quot;&gt;apk --help&lt;/code&gt; descript
 &lt;strong&gt;“It allows users to install packages with an index that is updated and used on-the-fly and not cached locally.”&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;--virtual run-dependencies&lt;/code&gt;: The &lt;code class=&quot;language-text&quot;&gt;apk add --help&lt;/code&gt; description for &lt;code class=&quot;language-text&quot;&gt;--virtual&lt;/code&gt; is &lt;strong&gt;“-t, —virtual NAME Instead of adding all the packages to ‘world’, create a new virtual package with the listed dependencies and add that to ‘world’; the actions of the command are easily reverted by deleting the virtual package.”&lt;/strong&gt; The Gliderlabs article gives a good example of using &lt;code class=&quot;language-text&quot;&gt;--virtual&lt;/code&gt; to install &lt;a href=&quot;http://gliderlabs.viewdocs.io/docker-alpine/usage/#user-content-virtual-packages&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;build-dependencies&lt;/a&gt; which can then be removed after building the image is complete. We’ve named our packages &lt;code class=&quot;language-text&quot;&gt;run-dependencies&lt;/code&gt; because they are needed at runtime and should not be removed.&lt;/p&gt;
 &lt;p&gt;Now lets go through the packages that we add&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;  bash \
   build-base \
   postgresql-client \
@@ -588,7 +588,7 @@ The &lt;code class=&quot;language-text&quot;&gt;apk --help&lt;/code&gt; descript
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;&lt;a href=&quot;https://pkgs.alpinelinux.org/packages?name=bash&amp;#x26;branch=edge&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;bash&lt;/a&gt; is added so that we can execute our &lt;a href=&quot;https://github.com/jer-k/gem_with_database/blob/master/bin/wait_for_pg.sh&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;wait&lt;em&gt;for&lt;/em&gt;pg.sh&lt;/a&gt; script when we use the &lt;a href=&quot;https://github.com/jer-k/gem_with_database/blob/master/docker-compose.yml#L4&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;entry_point&lt;/a&gt; in our &lt;code class=&quot;language-text&quot;&gt;docker-compose&lt;/code&gt; file. Also we are able to run a shell inside the container via &lt;code class=&quot;language-text&quot;&gt;docker-compose run app /bin/bash&lt;/code&gt;. This is actually a great way to play around with &lt;code class=&quot;language-text&quot;&gt;apk&lt;/code&gt; if you want to try it out!&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://pkgs.alpinelinux.org/packages?name=build-base&amp;#x26;branch=edge&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;build-base&lt;/a&gt; adds the applications needed to compile our application for use, like &lt;code class=&quot;language-text&quot;&gt;make&lt;/code&gt; and &lt;code class=&quot;language-text&quot;&gt;gcc&lt;/code&gt;. Below you can see everything that is added.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;/ # apk add --update build-base
 fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/main/x86_64/APKINDEX.tar.gz
 fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/community/x86_64/APKINDEX.tar.gz
@@ -618,7 +618,7 @@ OK: 165 MiB in 32 packages&lt;/code&gt;
 &lt;p&gt;&lt;a href=&quot;https://pkgs.alpinelinux.org/packages?name=postgresql-dev&amp;#x26;branch=edge&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;postgresql-dev&lt;/a&gt; adds the needed libraries to be able to install the &lt;code class=&quot;language-text&quot;&gt;pg&lt;/code&gt; gem.&lt;/p&gt;
 &lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;git&lt;/code&gt; is used in the autogenerated portion of the gemspec file for the &lt;a href=&quot;https://github.com/jer-k/gem_with_database/blob/master/gem_with_database.gemspec#L26-L28&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;ls-files&lt;/a&gt; command.&lt;/p&gt;
 &lt;p&gt;Thats it! Lets run our &lt;code class=&quot;language-text&quot;&gt;bin/ci.sh&lt;/code&gt; script and ensure everything is still working.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;$ bin/ci.sh
 db uses an image, skipping
 Building app
@@ -873,7 +873,7 @@ FactoryBot.define do
 end&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;The name of the factory is prefixed with the name of the gem to ensure that we aren’t going to create a collision if someone has already defined a factory named &lt;code class=&quot;language-text&quot;&gt;book&lt;/code&gt; in their application. Now we need to expose the factory in &lt;code class=&quot;language-text&quot;&gt;lib/gem_with_database.rb&lt;/code&gt; and we can move onto setting up our test database.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;require &amp;#39;gem_with_database/factories/author&amp;#39;&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;We’ll modify &lt;code class=&quot;language-text&quot;&gt;spec/spec_helper.rb&lt;/code&gt; to create a database in the test environment for us to use.&lt;/p&gt;
@@ -888,7 +888,7 @@ Rake::Task[&amp;#39;db:drop&amp;#39;].invoke
 Rake::Task[&amp;#39;db:create&amp;#39;].invoke
 Rake::Task[&amp;#39;db:schema:load&amp;#39;].invoke&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
-&lt;p&gt;First and foremost we need to set the &lt;code class=&quot;language-text&quot;&gt;ENV&lt;/code&gt; to &lt;code class=&quot;language-text&quot;&gt;test&lt;/code&gt; to ensure that we’re targeting only the test database; remember we set up the &lt;code class=&quot;language-text&quot;&gt;DatabaseTasks.env&lt;/code&gt; to read from &lt;code class=&quot;language-text&quot;&gt;ENV[&amp;#39;ENV&amp;#39;]&lt;/code&gt;. Then we load the needed files to invoke our rake tasks, stub out the &lt;code class=&quot;language-text&quot;&gt;task :environment&lt;/code&gt; like we did in the &lt;code class=&quot;language-text&quot;&gt;Rakefile&lt;/code&gt;, and create a new database with our schema. Let’s write a test for our &lt;code class=&quot;language-text&quot;&gt;Author&lt;/code&gt; class at &lt;code class=&quot;language-text&quot;&gt;spec/models/author_spec.rb&lt;/code&gt; and try it out.&lt;/p&gt;
+&lt;p&gt;First and foremost we need to set the &lt;code class=&quot;language-text&quot;&gt;ENV&lt;/code&gt; to &lt;code class=&quot;language-text&quot;&gt;test&lt;/code&gt; to ensure that we’re targeting only the test database; remember we set up the &lt;code class=&quot;language-text&quot;&gt;DatabaseTasks.env&lt;/code&gt; to read from &lt;code class=&quot;language-text&quot;&gt;ENV[&apos;ENV&apos;]&lt;/code&gt;. Then we load the needed files to invoke our rake tasks, stub out the &lt;code class=&quot;language-text&quot;&gt;task :environment&lt;/code&gt; like we did in the &lt;code class=&quot;language-text&quot;&gt;Rakefile&lt;/code&gt;, and create a new database with our schema. Let’s write a test for our &lt;code class=&quot;language-text&quot;&gt;Author&lt;/code&gt; class at &lt;code class=&quot;language-text&quot;&gt;spec/models/author_spec.rb&lt;/code&gt; and try it out.&lt;/p&gt;
 &lt;deckgo-highlight-code language=&quot;ruby&quot;  &gt;
           &lt;code slot=&quot;code&quot;&gt;require &amp;#39;spec_helper&amp;#39;
 
@@ -923,7 +923,7 @@ Finished in 0.02844 seconds (files took 2.13 seconds to load)
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;Success! We’ve created a re-usable database for the test environment and our tests are passing. The last thing we want to do is setup a way to run our tests in a continuous integration environment so that when the popularity of the gem has exploded and the number of contributors skyrockets, we’re able to ensure no one is committing broken code. We’ll do this by creating a &lt;code class=&quot;language-text&quot;&gt;Dockerfile&lt;/code&gt;, utilizing &lt;a href=&quot;https://docs.docker.com/compose/&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Docker Compose&lt;/a&gt;, and a few helpful scripts. However, please bear with me, I am by no means an expert with Docker; I’ve was able to fumble my way through this and get it working so if my explanations aren’t as thorough I apologize.&lt;/p&gt;
 &lt;p&gt;First, the &lt;a href=&quot;https://github.com/jer-k/gem_with_database/blob/old_dockerfile/Dockerfile&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Dockerfile&lt;/a&gt;.&lt;/p&gt;
-&lt;deckgo-highlight-code   &gt;
+&lt;deckgo-highlight-code   highlight-lines=&quot;undefined&quot;&gt;
           &lt;code slot=&quot;code&quot;&gt;FROM ruby:2.5
 WORKDIR /usr/src/app/
 
@@ -1098,7 +1098,7 @@ The most common rails commands are:
 All commands can be run with -h (or --help) for more information.&lt;/code&gt;
         &lt;/deckgo-highlight-code&gt;
 &lt;p&gt;Seeing this result, the easiest thing that came to mind was to figure out where the line &lt;code class=&quot;language-text&quot;&gt;The most common rails commands are&lt;/code&gt; lives and start my work there. Going to the &lt;a href=&quot;https://github.com/rails/rails&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Rails&lt;/a&gt; repo on Github and &lt;a href=&quot;https://github.com/rails/rails/search?utf8=%E2%9C%93&amp;#x26;q=The+most+common+rails+commands+are&amp;#x26;type=&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;searching&lt;/a&gt;, I saw that the second result was a &lt;a href=&quot;https://github.com/rails/rails/blob/ae3e241b573b450fd9ce694a458ad942a8bd6b03/railties/lib/rails/commands/help/USAGE&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;USAGE&lt;/a&gt; file in &lt;a href=&quot;https://github.com/rails/rails/tree/master/railties&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;Railties&lt;/a&gt; and it was exactly what I was looking for. Now I needed to understand how this &lt;code class=&quot;language-text&quot;&gt;USAGE&lt;/code&gt; file gets invoked.&lt;/p&gt;
-&lt;p&gt;I immediately added &lt;code class=&quot;language-text&quot;&gt;spec.add_development_dependency &amp;#39;railties&amp;#39;, &amp;#39;~&amp;gt; 5&amp;#39;&lt;/code&gt; to my gem and opened up directory containing the &lt;code class=&quot;language-text&quot;&gt;USAGE&lt;/code&gt; file. In the same directory is &lt;a href=&quot;https://github.com/rails/rails/blob/ae3e241b573b450fd9ce694a458ad942a8bd6b03/railties/lib/rails/commands/help/help_command.rb&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;help_command.rb&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I immediately added &lt;code class=&quot;language-text&quot;&gt;spec.add_development_dependency &apos;railties&apos;, &apos;~&gt; 5&apos;&lt;/code&gt; to my gem and opened up directory containing the &lt;code class=&quot;language-text&quot;&gt;USAGE&lt;/code&gt; file. In the same directory is &lt;a href=&quot;https://github.com/rails/rails/blob/ae3e241b573b450fd9ce694a458ad942a8bd6b03/railties/lib/rails/commands/help/help_command.rb&quot; target=&quot;_blank&quot; rel=&quot;nofollow noopener noreferrer&quot;&gt;help_command.rb&lt;/a&gt;.&lt;/p&gt;
 &lt;deckgo-highlight-code language=&quot;ruby&quot;  &gt;
           &lt;code slot=&quot;code&quot;&gt;module Rails
   module Command
