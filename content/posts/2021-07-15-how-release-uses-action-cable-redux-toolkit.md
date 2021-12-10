@@ -15,6 +15,8 @@ description: ""
 socialImage:
 ---
 
+This blog post was originally posted on the [Release Blog](https://releasehub.com/blog). I have reposted this article here due to...
+
 Over the past few weeks at [Release](https://releasehub.com) the Frontend Engineering team has started working on adding Redux to Release. We had been making use of [React Context](https://reactjs.org/docs/context.html) but felt that we were starting to stretch its capabilities. In some places we were having to add multiple providers to implement new features. After some research on the current state of Redux, we decided to go with [Redux Toolkit](https://redux-toolkit.js.org/) and [Redux Saga](https://redux-saga.js.org/). Moving all our data into the Redux store and out of local state meant that we were going to have to change our approach with [Action Cable](https://guides.rubyonrails.org/action_cable_overview.html) and how we were going to receive the messages, store them, and display changes for the user.
 
 ### Action Cable, Redux, and Release
@@ -117,7 +119,7 @@ The method receives a room parameter to ensure we are sending messages about a s
 
 ### Redux Setup
 
-![Release Build Screen](Release-Build-Page.png)
+![Release Build Screen](media/Release-Build-Page.png)
 
 As you’ll recall we’re using Redux Toolkit and we’re not going to cover our entire setup with Toolkit, instead focusing only on the portions relevant to updating the `Build` when we receive an Action Cable message. From there we’ll go over a small wrapper component we made to handle receiving the Action Cable messages and tie it all together with a small demo component.
 

@@ -14,13 +14,15 @@ description: ""
 socialImage:
 ---
 
+This blog post was originally posted on the [Release Blog](https://releasehub.com/blog). I have reposted this article here due to...
+
 At Release, environments are our main focus, but we can’t create environments without builds. Recently we undertook a project to revisit our build infrastructure and determine if it needed to be upgraded. Build times had become a big factor in our service delivery and we needed a way to improve our customers’ experiences. One of the main areas that we wanted to improve upon was the parallelism of building multiple docker images for a single application.
 
 The title of the article already spoiled the solution, and the alternative ‘Release Did This One Thing To Cut Their Build Time In Half!’ didn’t quite fly with the rest of the company, but Docker’s new [buildx](https://github.com/docker/buildx) project fit the bill. First, we’ll cover what our original infrastructure looked like and how long builds on an example project were taking. Then, we’ll describe the changes we made to use buildx and the speed increases we observed.
 
 Let’s start off with a diagram of what our original infrastructure looked like.
 
-![release-builder-architecture](//images.ctfassets.net/qf96nnjfyr2y/75WoaAxoZMIL73zK0JKPId/f98ff948f97c0cc7b979c4b4352a032c/release-builder-architecture.png)
+![release-builder-architecture](media/release-builder-architecture.png)
 
 As you can see, the requests for builds would flow into our main Rails application and then divvied out to the different builder instances through Sidekiq. The `builder` container is Ruby code that would authenticate to Github, clone the repository, check out the correct SHA, and then execute the `docker build`. Due to the way we built the authentication to pull the code from Github, a single `builder` container could only clone one repository at a time. Which meant that the container could only do a single build request at a time. We added threading in the Ruby code to be able to execute multiple `docker build` commands at a time, but the number of builder containers we had spun up limited our concurrent builds. While it’s not hard to horizontally scale with Kubernetes, we saw this authentication setup as a major bottleneck.
 
@@ -30,7 +32,7 @@ Release Applications can contain many docker images and one of our favorite exam
 
 _NOTE_ I forked the `awesome-release` repo to my own Github, `jer-k` for the following results.
 
-![uncached-release](//images.ctfassets.net/qf96nnjfyr2y/21reYa1lgqocT6MTojva4J/0d6826574fb8718d76bfcf6c855dd490/uncached-release.png)
+![uncached-release](media/release-build-uncached.png)
 
 We can see that this brand new build with no cache hits took two minutes and 15 seconds to complete. Next, we want to make a few changes to ensure that each Docker image needs to be rebuilt. The changes are listed below.
 
@@ -47,7 +49,7 @@ Changes to be committed:
 
 For the purpose of this blog post, I ensured the following build ran on the same builder as the first and that we will have cache hits. As noted before, this wasn’t always the case in our production environment.
 
-![cached-release](//images.ctfassets.net/qf96nnjfyr2y/69tKlV3mBuV6S6c7BhSaay/c51464f443c1888cd4f74fe3394b32f4/cached-release.png)
+![cached-release](media/release-build-cached.png)
 
 The caching helps and cuts 45 seconds off the build! The uncached build took almost twice as long as the second build with caching, but our assumption was that we could do a lot better (cached and uncached) with some new technology.
 
@@ -128,11 +130,11 @@ The default `sticky` means that the builds should always end up on the same serv
 
 Using the same example-voting-app repository as before, I created a new branch `buildx_builders` and pointed the code to the buildx servers.
 
-![uncached-buildx](//images.ctfassets.net/qf96nnjfyr2y/3gqbExE2XQMNqyUQ60m27m/9e215fc99510b5a18bb6792eba5679ec/uncached-buildx.png)
+![uncached-buildx](media/release-buildx-uncached.png)
 
 What we see is that this uncached build was more than twice as fast as the other uncached build and even faster than the cached build on the old infrastructure! But uncached builds should be a thing of the past with the sticky load balancing, so let’s make the same changes as the previous branch and see the results.
 
-![cached-buildx](//images.ctfassets.net/qf96nnjfyr2y/2MxDyCqaSrOnffVSNC3SFu/abc0896e3eef27b927394b12fc9e1e29/cached-buildx.png)
+![cached-buildx](media/release-buildx-cached.png)
 
 This build finished three times faster than the previous cached build! These types of speed increases are the reason we set out to redo our build infrastructure. The faster the builds complete, the faster we can create environments and help our customers deliver their products.
 

@@ -16,6 +16,8 @@ description: ""
 socialImage:
 ---
 
+This blog post was originally posted on the [Release Blog](https://releasehub.com/blog). I have reposted this article here due to...
+
 I was recently tasked with implementing Gitlab support for Release and to complete that task I needed to implement authentication for Gitlab and a way to handle their webhooks. I completed the authentication first and left the webhook implementation for another pull request as I wanted to refactor the way we were handling all webhooks.
 
 As I started the webhook work, the state of how Release handled webhooks was that Github was using the [github_webhook](https://github.com/ssaunier/github_webhook) gem and Bitbucket was using some custom built code that lived in a Controller Concern. With the need to add a third client I wanted to align everything into a few classes that allow us to easily onboard more providers if the need ever arose.
